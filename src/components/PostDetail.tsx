@@ -19,31 +19,39 @@ const PostDetail = ({postId}: {postId: number}) => {
         { postStatus: FetchStatus.LOADING, commentsStatus: FetchStatus.LOADING });
     
     useEffect(() => {
+        let ignore = true;
         fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
             .then((response) => response.json())
-            .then((data: Post) => { 
+            .then((data: Post) => {
+                if (!ignore) return;
                 setPost(data);
                 dispatch({ type: FetchActionType.SUCCESS, key: "postStatus" });
             })
             .catch(() => { 
+                if (!ignore) return;
                 setPost(undefined);
                 dispatch({ type: FetchActionType.ERROR, key: "postStatus" });
                 // We won't implement the retry with backoff logic here, because it is only for assignment.
             });
+        return () => { ignore = false; }
     }, [postId]);
 
     useEffect(() => {
+        let ignore = true;
         fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
             .then((response) => response.json())
             .then((data: Comment[]) => { 
+                if (!ignore) return;
                 setComments(data);
                 dispatch({ type: FetchActionType.SUCCESS, key: "commentsStatus" });
             })
             .catch(() => {
+                if (!ignore) return;
                 setComments([]);
                 dispatch({ type: FetchActionType.ERROR, key: "commentsStatus" });
                 // We won't implement the retry with backoff logic here, because it is only for assignment.
             });
+        return () => { ignore = false; }
     }, [postId]);
 
     return (

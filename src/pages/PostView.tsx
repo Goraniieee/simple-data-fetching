@@ -17,17 +17,21 @@ const PostView = () => {
     const [status, dispatch] = useReducer(statusReducer<StatusList, keyof StatusList>, { postListStatus: FetchStatus.LOADING });
 
     useEffect(() => {
+        let ignore = true;
         fetch("https://jsonplaceholder.typicode.com/posts")
             .then((response) => response.json())
             .then((data: Post[]) => { 
+                if (!ignore) return;
                 setPosts(data);
                 dispatch({ type: FetchActionType.SUCCESS, key: "postListStatus" });
             })
             .catch(() => {
+                if (!ignore) return;
                 setPosts([]);
                 dispatch({ type: FetchActionType.ERROR, key: "postListStatus" });
                 // We won't implement the retry with backoff logic here, because it is only for assignment.
             });
+        return () => { ignore = false; }
     }, []);
 
     return (
