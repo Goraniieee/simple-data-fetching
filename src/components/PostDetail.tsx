@@ -23,42 +23,41 @@ const PostDetail = ({ postId }: { postId: number }) => {
   );
 
   useEffect(() => {
-    let ignore = true;
+    let ignore = false;
+
+    dispatch({ type: FetchActionType.LOADING, key: 'postStatus' });
+    dispatch({ type: FetchActionType.LOADING, key: 'commentsStatus' });
+
     fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
       .then((response) => response.json())
       .then((data: Post) => {
-        if (!ignore) return;
+        if (ignore) return;
         setPost(data);
         dispatch({ type: FetchActionType.SUCCESS, key: 'postStatus' });
       })
       .catch(() => {
-        if (!ignore) return;
+        if (ignore) return;
         setPost(undefined);
         dispatch({ type: FetchActionType.ERROR, key: 'postStatus' });
         // We won't implement the retry with backoff logic here, because it is only for assignment.
       });
-    return () => {
-      ignore = false;
-    };
-  }, [postId]);
 
-  useEffect(() => {
-    let ignore = true;
     fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`)
       .then((response) => response.json())
       .then((data: Comment[]) => {
-        if (!ignore) return;
+        if (ignore) return;
         setComments(data);
         dispatch({ type: FetchActionType.SUCCESS, key: 'commentsStatus' });
       })
       .catch(() => {
-        if (!ignore) return;
+        if (ignore) return;
         setComments([]);
         dispatch({ type: FetchActionType.ERROR, key: 'commentsStatus' });
         // We won't implement the retry with backoff logic here, because it is only for assignment.
       });
+
     return () => {
-      ignore = false;
+      ignore = true;
     };
   }, [postId]);
 
@@ -79,10 +78,10 @@ const PostDetail = ({ postId }: { postId: number }) => {
         <div>데이터를 불러오는 중에 오류가 발생했습니다.</div>
       ) : (
         comments.map((comment: Comment, index: number) => (
-          <div key={index}>
-            <strong>작성자: {comment.email}</strong>
-            <div>{comment.body}</div>
-          </div>
+          <CommentContainer key={index}>
+            <CommentAuthor>작성자: {comment.email}</CommentAuthor>
+            <CommentBody>{comment.body}</CommentBody>
+          </CommentContainer>
         ))
       )}
     </Wrapper>
@@ -95,11 +94,29 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   gap: 1rem;
+  height: 100%;
+  overflow-y: auto;
 `;
 
 const Header = styled.h1`
   font-size: 2rem;
   font-weight: bold;
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+`;
+
+const CommentContainer = styled.div`
+  align-self: flex-start;
+  margin-bottom: 1.5rem;
+`;
+
+const CommentAuthor = styled.h4`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const CommentBody = styled.div`
+  font-size: 1rem;
 `;

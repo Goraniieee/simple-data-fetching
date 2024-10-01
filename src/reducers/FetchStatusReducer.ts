@@ -1,4 +1,5 @@
 export enum FetchActionType {
+  LOADING = 'FETCH_LOADING',
   SUCCESS = 'FETCH_SUCCESS',
   ERROR = 'FETCH_ERROR',
 }
@@ -10,6 +11,7 @@ export enum FetchStatus {
 }
 
 type Action<T, K extends keyof T> =
+  | { type: FetchActionType.LOADING; key: K }
   | { type: FetchActionType.SUCCESS; key: K }
   | { type: FetchActionType.ERROR; key: K };
 
@@ -21,6 +23,8 @@ export const statusReducer = <
   action: Action<T, K>,
 ): T => {
   switch (action.type) {
+    case FetchActionType.LOADING:
+      return { ...state, [action.key]: FetchStatus.LOADING };
     case FetchActionType.SUCCESS:
       if (state[action.key] !== FetchStatus.LOADING) {
         console.warn(
