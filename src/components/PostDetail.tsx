@@ -25,6 +25,9 @@ const PostDetail = ({ postId }: { postId: number }) => {
   useEffect(() => {
     let ignore = false;
     
+    dispatch({ type: FetchActionType.LOADING, key: 'postStatus' });
+    dispatch({ type: FetchActionType.LOADING, key: 'commentsStatus' });
+    
     fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
       .then((response) => response.json())
       .then((data: Post) => {
