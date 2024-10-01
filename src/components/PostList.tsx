@@ -50,7 +50,8 @@ const TitleContainer = styled.div<{ isSelected: boolean }>`
   width: 96%;
   cursor: pointer;
 
-  background-color: ${(props) => (props.isSelected ? '#d3d3d3' : 'transparent')};
+  background-color: ${(props) =>
+    props.isSelected ? '#d3d3d3' : 'transparent'};
 
   &:hover {
     span {
@@ -63,6 +64,6 @@ const TitleContainer = styled.div<{ isSelected: boolean }>`
   }
 
   span {
-    color: ${(props) => (props.isSelected ? 'black' : 'inherit')}; 
+    color: ${(props) => (props.isSelected ? 'black' : 'inherit')};
   }
 `;

@@ -55,11 +55,17 @@ const PostView = () => {
       ) : (
         <>
           <LeftSection>
-            <PostList posts={posts} selectedPostId={selectedPostId} setSelectedPostId={setSelectedPostId} />
+            <PostList
+              posts={posts}
+              selectedPostId={selectedPostId}
+              setSelectedPostId={setSelectedPostId}
+            />
           </LeftSection>
           <Divider />
           <RightSection>
-            {selectedPostId !== undefined && <PostDetail postId={selectedPostId} />}
+            {selectedPostId !== undefined && (
+              <PostDetail postId={selectedPostId} />
+            )}
           </RightSection>
         </>
       )}
