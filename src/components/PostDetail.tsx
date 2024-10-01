@@ -24,7 +24,7 @@ const PostDetail = ({ postId }: { postId: number }) => {
 
   useEffect(() => {
     let ignore = false;
-    
+
     dispatch({ type: FetchActionType.LOADING, key: 'postStatus' });
     dispatch({ type: FetchActionType.LOADING, key: 'commentsStatus' });
     
@@ -78,10 +78,10 @@ const PostDetail = ({ postId }: { postId: number }) => {
         <div>데이터를 불러오는 중에 오류가 발생했습니다.</div>
       ) : (
         comments.map((comment: Comment, index: number) => (
-          <div key={index}>
-            <strong>작성자: {comment.email}</strong>
-            <div>{comment.body}</div>
-          </div>
+          <CommentContainer key={index}>
+            <CommentAuthor>작성자: {comment.email}</CommentAuthor>
+            <CommentBody>{comment.body}</CommentBody>
+          </CommentContainer>
         ))
       )}
     </Wrapper>
@@ -94,11 +94,29 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   gap: 1rem;
+  height: 100%;
+  overflow-y: auto;
 `;
 
 const Header = styled.h1`
   font-size: 2rem;
   font-weight: bold;
+  align-self: flex-start;
+  margin-bottom: 0.5rem;
+`;
+
+const CommentContainer = styled.div`
+  align-self: flex-start;
+  margin-bottom: 1.5rem;
+`;
+
+const CommentAuthor = styled.h4`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const CommentBody = styled.div`
+  font-size: 1rem;
 `;
