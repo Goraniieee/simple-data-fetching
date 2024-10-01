@@ -9,7 +9,7 @@ export enum FetchStatus {
   ERROR = 'error',
 }
 
-export type Action<T, K extends keyof T> =
+type Action<T, K extends keyof T> =
   | { type: FetchActionType.SUCCESS; key: K }
   | { type: FetchActionType.ERROR; key: K };
 
